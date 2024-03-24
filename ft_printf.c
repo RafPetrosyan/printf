@@ -1,48 +1,29 @@
 #include "ft_printf.h"
-#include <stdarg.h>
-#include <stdio.h>
 
-
-int	get_specifier(char c, va_list *list)
+int	call_specifier(char c, va_list *list)
 {
 	if (c == 'c')
 		return (ft_putchar((char)va_arg(*list, int)));
 	else if (c == 's')
 		return (ft_putstr(va_arg(*list, char *)));
-	else if (c == 'p')
-		re
 	else if (c == 'd')
-	{
-
-	}
+		return (ft_putnbr(va_arg(*list, int)));
 	else if (c == 'i')
-	{
-
-	}
+		return (ft_putnbr(va_arg(*list, int)));
 	else if (c == 'u')
-	{
-
-	}
+		return (ft_putnbru(va_arg(*list, unsigned int)));
+	else if (c == 'p')
+		return (ft_puthex(va_arg(*list, unsigned long long), 'p'));
 	else if (c == 'x')
-	{
-
-	}
+		return (ft_puthex(va_arg(*list, unsigned int), 'x'));
 	else if (c == 'X')
-	{
-
-	}
-	else if (c == '%')
-	{
-
-	}
+		return (ft_puthex(va_arg(*list, unsigned int), 'X'));
 	else if (c != '\0')
-	{
 		return (ft_putchar(c));
-	}
 	return (0);
 }
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
 	int		i;
 	int		count;
@@ -55,19 +36,15 @@ int ft_printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
-			count += get_specifier(format[++i],&list);
-			if(format[i] != '\0')
+			count += call_specifier(format[++i], &list);
+			if (format[i] != '\0')
 				++i;
 		}
 		else
+		{
 			write(1, &format[i++], 1);
+			++count;
+		}
 	}
 	return (count);
-}
-
-int main()
-{
-	ft_printf("%s", "Hello");
-
-	return (0);
 }
